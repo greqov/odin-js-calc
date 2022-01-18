@@ -5,7 +5,7 @@
 html {
   background-color: #333;
   color: #eee;
-  font-family: monospace;
+  font-family: 'Ubuntu Mono', monospace;
 }
 
 body {
@@ -17,3 +17,47 @@ body {
 a {
   color: skyblue;
 }
+
+button {
+  font-family: inherit;
+}
+
+:root {
+  --key-shadow: rgba(0,0,0,0.2);
+}
+
+.calc-key {
+  position: relative;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  padding-bottom: 5px;
+  font-size: 40px;
+  line-height: 1;
+  border: 5px solid transparent;
+  color: #333;
+  background-color: white;
+  border-right-color: var(--key-shadow);
+  border-bottom-color: var(--key-shadow);
+  border-radius: 5px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.calc-key:active {
+  top: 2px;
+  background-color: rgba(255,255,255,0.8);
+  border-top-color: var(--key-shadow);
+  border-left-color: var(--key-shadow);
+  border-right-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.calc-key.calc-key--danger {
+  color: white;
+  background-color: tomato;
+}
+
