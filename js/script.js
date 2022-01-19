@@ -15,13 +15,7 @@
   };
 
   const pickOperation = (operator) => operations[operator];
-  const operate = (operator, a, b) => pickOperation(operator)(Number(a), Number(b));
-
-  operate('+', 1, 2);
-
-  document.addEventListener('keypress', (e) => {
-    console.log(e.key);
-  });
+  const operate = (operator, a, b) => pickOperation(operator)(a, b);
 
   // update display
   // get all UI elements
@@ -32,7 +26,6 @@
 
   // set some state
   let state = {
-    val: '',
     a: '',
     b: '',
     operator: '',
@@ -45,7 +38,6 @@
 
   function clearState() {
     state = {
-      val: '',
       a: '',
       b: '',
       operator: '',
@@ -67,13 +59,19 @@
     calcStateUI.textContent = JSON.stringify(state, null, 2);
   }
 
-  function doOperation(operator, a, b) {
+  function doOperation(operator, a, b, printChar) {
     const result = operate(operator, a, b);
-    clearState();
+    console.log({ result });
     state.a = result;
+    state.b = '';
     state.operator = operator;
     state.result = result;
-    state.ui.result = result;
+    state.ui.value = '';
+    if (printChar) {
+      state.ui.result = result + printChar;
+    } else {
+      state.ui.result = result;
+    }
   }
 
   // add keypress events somehow
@@ -89,19 +87,47 @@
           ui.value += '.';
         }
       }
-      return;
+    } else {
+      ui.value += value;
     }
-
-    ui.value += value;
   }
 
   function processOperatorKey(operator) {
-    const { ui } = state;
+    const { result, ui } = state;
 
-    if (ui.value.length === 0 && operator === '-') {
+    if (result && !ui.value) {
+      state.operator = operator;
+      // check if the last el is operator.
+      if (typeof ui.result === 'number') {
+        ui.result += state.operator;
+      } else {
+        ui.result = ui.result.slice(0, -1) + operator;
+      }
+    }
+
+    if (operator === '-' && ui.value.length === 0 && !result) {
       ui.value += operator;
-    } else {
-      console.log('do action');
+      return;
+    }
+
+    if (state.a && ui.value) {
+      // prev operator
+      doOperation(state.operator, state.a, Number(ui.value), operator);
+      state.operator = operator;
+      updateUI();
+      // print
+      return;
+    }
+
+    state.operator = operator;
+
+    if (!state.a) {
+      state.a = Number(ui.value);
+      ui.result = state.a + operator;
+      ui.value = '';
+    } else if (ui.value.length > 0) {
+      state.b = Number(ui.value);
+      doOperation(operator, state.a, state.b);
     }
   }
 
@@ -117,11 +143,13 @@
       }
 
       if (operator === '=') {
-        if (state.a && state.b) {
-          doOperation(state.operator, state.b, state.a);
-          state.operator = '';
-          updateUI();
-        }
+        const { operator: op, a, b, ui } = state;
+
+        if (!a || !ui.value) return;
+        if (!b) state.b = Number(ui.value);
+
+        doOperation(op, a, state.b, true);
+        updateUI();
         return;
       }
 

@@ -64,10 +64,18 @@ button {
 
 .display-line {
   display: block;
+  padding: 3px;
   font-size: 54px;
   text-align: right;
 }
 
 .display-line--top {
   font-size: 32px;
+  min-height: 38px;
+  background-color: rgba(0,0,0,0.2);
+}
+
+.display-line--bottom {
+  min-height: 60px;
+  background-color: rgba(0,0,0,0.1);
 }
