@@ -45,6 +45,7 @@ button {
   border-radius: 5px;
   vertical-align: middle;
   cursor: pointer;
+  user-select: none;
 }
 
 .calc-key:active {
@@ -61,3 +62,12 @@ button {
   background-color: tomato;
 }
 
+.display-line {
+  display: block;
+  font-size: 54px;
+  text-align: right;
+}
+
+.display-line--top {
+  font-size: 32px;
+}

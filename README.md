@@ -4,7 +4,7 @@
 
 - [x] basic math operators (+ - * /)
 - [x] operate function
-- [] basic html markup (buttons, display, clear)
+- [x] basic html markup (buttons, display, clear)
 - [] functions to update display
 - [] code all functionality
 - [] 12 + 7 - 5 * 3 = should yield 42
