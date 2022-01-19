@@ -2,8 +2,8 @@
 
 ## TODO
 
-- [] basic math operators (+ - * /)
-- [] operate function
+- [x] basic math operators (+ - * /)
+- [x] operate function
 - [] basic html markup (buttons, display, clear)
 - [] functions to update display
 - [] code all functionality
