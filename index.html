@@ -13,24 +13,26 @@
   <body>
     <h1>Hello there!</h1>
 
-    <div class="calc">
+    <div class="calc js-calc">
       <div class="display">
         <span class="display-line display-line--top">3+</span>
         <span class="display-line display-line--bottom">2</span>
       </div>
       <div class="calc-controls">
-        <button class="calc-key" type="button">0</button>
+        <button class="calc-key" type="button" data-value="0">0</button>
         <button class="calc-key" type="button">.</button>
-        <button class="calc-key" type="button">1</button>
-        <button class="calc-key" type="button">2</button>
-        <button class="calc-key" type="button">&plus;</button>
-        <button class="calc-key" type="button">&minus;</button>
-        <button class="calc-key" type="button">&times;</button>
-        <button class="calc-key" type="button">&divide;</button>
-        <button class="calc-key" type="button">&equals;</button>
-        <button class="calc-key calc-key--danger" type="button">C</button>
+        <button class="calc-key" type="button" data-value="1">1</button>
+        <button class="calc-key" type="button" data-value="2">2</button>
+        <button class="calc-key" type="button" data-operator="+">&plus;</button>
+        <button class="calc-key" type="button" data-operator="-">&minus;</button>
+        <button class="calc-key" type="button" data-operator="*">&times;</button>
+        <button class="calc-key" type="button" data-operator="/">&divide;</button>
+        <button class="calc-key" type="button" data-operator="=">&equals;</button>
+        <button class="calc-key calc-key--danger" type="button" data-operator="clear">C</button>
       </div>
     </div>
+
+    <div class="calc-state" style="margin-top: 24px;"></div>
 
 
     <img src="https://cdn-icons-png.flaticon.com/512/342/342344.png" alt="" width="240" style="margin-top: 24px;">
