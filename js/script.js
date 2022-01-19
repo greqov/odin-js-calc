@@ -78,7 +78,7 @@
 
   // add keypress events somehow
 
-  function doValue(value) {
+  function processValueKey(value) {
     const { operator, result, ui } = state;
     state.val = value;
 
@@ -96,7 +96,7 @@
     }
   }
 
-  function doOper(operator) {
+  function processOperatorKey(operator) {
     const { a, b, ui } = state;
     state.operator = operator;
 
@@ -130,8 +130,8 @@
         return;
       }
 
-      if (operator) doOper(operator);
-      if (value) doValue(value);
+      if (operator) processOperatorKey(operator);
+      if (value) processValueKey(value);
 
       updateUI();
     });
