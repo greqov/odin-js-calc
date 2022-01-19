@@ -38,8 +38,8 @@
     operator: '',
     result: '',
     ui: {
-      value: '_',
-      result: '_',
+      value: '',
+      result: '',
     },
   };
 
@@ -51,8 +51,8 @@
       operator: '',
       result: '',
       ui: {
-        value: '_',
-        result: '_',
+        value: '',
+        result: '',
       },
     };
   }
@@ -79,34 +79,29 @@
   // add keypress events somehow
 
   function processValueKey(value) {
-    const { operator, result, ui } = state;
-    state.val = value;
+    const { ui } = state;
 
-    if (!operator && result) {
-      state.result = '';
-      ui.result = '_';
+    if (value === '.') {
+      if (ui.value.indexOf('.') === -1) {
+        if (ui.value.length === 0 || (ui.value.length === 1 && ui.value.slice(0, 1) === '-')) {
+          ui.value += '0.';
+        } else {
+          ui.value += '.';
+        }
+      }
+      return;
     }
 
-    if (ui.value === '_') {
-      ui.value = state.val;
-      state.a = value;
-    } else {
-      ui.value += value;
-      state.a = ui.value;
-    }
+    ui.value += value;
   }
 
   function processOperatorKey(operator) {
-    const { a, b, ui } = state;
-    state.operator = operator;
+    const { ui } = state;
 
-    if (a && b) {
-      doOperation(operator, a, b);
+    if (ui.value.length === 0 && operator === '-') {
+      ui.value += operator;
     } else {
-      state.b = a;
-      state.a = '';
-      ui.value = '_';
-      ui.result = a + operator;
+      console.log('do action');
     }
   }
 
