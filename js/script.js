@@ -15,7 +15,7 @@
   };
 
   const pickOperation = (operator) => operations[operator];
-  const operate = (operator, a, b) => pickOperation(operator)(a, b);
+  const operate = (operator, a, b) => pickOperation(operator)(Number(a), Number(b));
 
   operate('+', 1, 2);
 
@@ -29,44 +29,114 @@
   const calc = document.querySelector('.js-calc');
   const displayLine = calc.querySelector('.display-line--bottom');
   const displayLineResult = calc.querySelector('.display-line--top');
+
   // set some state
-  const state = {
-    line: '',
-    lineResult: '',
+  let state = {
+    val: '',
+    a: '',
+    b: '',
     operator: '',
+    result: '',
+    ui: {
+      value: '_',
+      result: '_',
+    },
   };
+
+  function clearState() {
+    state = {
+      val: '',
+      a: '',
+      b: '',
+      operator: '',
+      result: '',
+      ui: {
+        value: '_',
+        result: '_',
+      },
+    };
+  }
+
   // update state on operations
   // update UI after operations
   function updateUI() {
-    displayLine.textContent = state.line;
-    displayLineResult.textContent = state.lineResult;
-    calcStateUI.textContent = JSON.stringify(state);
-  }
+    const { ui } = state;
 
-  updateUI();
+    displayLine.textContent = ui.value;
+    displayLineResult.textContent = ui.result;
+    calcStateUI.textContent = JSON.stringify(state, null, 2);
+  }
 
   function doOperation(operator, a, b) {
     const result = operate(operator, a, b);
+    clearState();
+    state.a = result;
+    state.operator = operator;
     state.result = result;
-    state.lineResult = result; // why?
-    state.line = '_';
-    updateUI();
+    state.ui.result = result;
   }
 
-  doOperation('+', 4, 3);
-
   // add keypress events somehow
+
+  function doValue(value) {
+    const { operator, result, ui } = state;
+    state.val = value;
+
+    if (!operator && result) {
+      state.result = '';
+      ui.result = '_';
+    }
+
+    if (ui.value === '_') {
+      ui.value = state.val;
+      state.a = value;
+    } else {
+      ui.value += value;
+      state.a = ui.value;
+    }
+  }
+
+  function doOper(operator) {
+    const { a, b, ui } = state;
+    state.operator = operator;
+
+    if (a && b) {
+      doOperation(operator, a, b);
+    } else {
+      state.b = a;
+      state.a = '';
+      ui.value = '_';
+      ui.result = a + operator;
+    }
+  }
 
   const calcKeys = calc.querySelectorAll('.calc-key');
   calcKeys.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const { value, operator } = e.target.dataset;
 
-      if (operator) state.operator = operator;
-      if (value) state.value = value;
+      if (operator === 'clear') {
+        clearState();
+        updateUI();
+        return;
+      }
+
+      if (operator === '=') {
+        if (state.a && state.b) {
+          doOperation(state.operator, state.b, state.a);
+          state.operator = '';
+          updateUI();
+        }
+        return;
+      }
+
+      if (operator) doOper(operator);
+      if (value) doValue(value);
 
       updateUI();
     });
   });
 
+  // init actions
+  updateUI();
 })();
