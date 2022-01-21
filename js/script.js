@@ -38,7 +38,7 @@
     },
   };
 
-  function clearState() {
+  function clearState(message) {
     state = {
       math: {
         a: 0,
@@ -47,7 +47,7 @@
       },
       ui: {
         result: '',
-        value: '0',
+        value: message || '0',
       },
     };
   }
@@ -69,6 +69,7 @@
 
     if (value === '.') {
       if (ui.value.indexOf('.') === -1) {
+        // TODO: add 0. case
         ui.value += '.';
       }
       return;
@@ -91,12 +92,16 @@
         console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
         const result = operate(math.operator, math.a, math.b);
 
-        // update state
-        math.a = result;
-        math.b = '';
-        math.operator = '';
-        ui.result = '';
-        ui.value = String(result);
+        if (Math.abs(result) === Infinity || Number.isNaN(result)) {
+          clearState('Error');
+        } else {
+          // update state
+          math.a = result;
+          math.b = '';
+          math.operator = '';
+          ui.result = '';
+          ui.value = String(result);
+        }
       } else {
         console.log('Not enough data to perform calculation');
       }
@@ -127,6 +132,8 @@
   calcKeys.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const { value, operator } = e.target.dataset;
+
+      if (state.ui.value === 'Error') clearState();
 
       if (operator === 'clear') {
         clearState();
