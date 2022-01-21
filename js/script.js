@@ -62,8 +62,11 @@
 
     if (value === '.') {
       if (ui.value.indexOf('.') === -1) {
-        // TODO: add 0. case
-        ui.value += '.';
+        if (ui.value === '') {
+          ui.value += '0.';
+        } else {
+          ui.value += '.';
+        }
       }
       return;
     }
