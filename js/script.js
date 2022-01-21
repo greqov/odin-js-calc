@@ -92,6 +92,12 @@
       return;
     }
 
+    if (operator === 'del') {
+      ui.value = ui.value.slice(0, -1);
+      if (!ui.value || ui.value === '-') ui.value = '0';
+      return;
+    }
+
     function tryCalculation() {
       if (math.operator && ui.value) {
         math.b = ui.value;
