@@ -25,7 +25,6 @@
   const displayLineResult = calc.querySelector('.display-line--top');
 
   // set some state
-  // TODO: simplify state?
   let state = {
     math: {
       a: 0,
@@ -88,9 +87,13 @@
   function processOperatorKey(operator) {
     const { math, ui } = state;
 
+    if (operator === 'clear') {
+      clearState();
+      return;
+    }
+
     function tryCalculation() {
       if (math.operator && ui.value) {
-        // TODO: check if ui.result contains operator!
         math.b = ui.value;
         console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
         const result = operate(math.operator, math.a, math.b);
@@ -137,12 +140,6 @@
       const { value, operator } = e.target.dataset;
 
       if (state.ui.value === 'Error') clearState();
-
-      if (operator === 'clear') {
-        clearState();
-        updateUI();
-        return;
-      }
 
       if (operator) processOperatorKey(operator);
       if (value) processValueKey(value);

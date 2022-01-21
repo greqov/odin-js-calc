@@ -13,5 +13,6 @@
 - [x] support floating numbers (2.54.12.1)
 - [] backspace button
 - [] keyboard support
+- [x] pretty print operator keys
 - [] refactor
 - [] update readme
