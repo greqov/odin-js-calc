@@ -1,6 +1,13 @@
 'use strict';
 
 (function () {
+  const printKeys = {
+    '+': '&plus;',
+    '-': '&minus;',
+    '*': '&times;',
+    '/': '&divide;',
+  };
+
   const operations = {
     '+': (a, b) => a + b,
     '-': (a, b) => a - b,
@@ -51,7 +58,7 @@
     const { ui } = state;
 
     displayLine.textContent = ui.value;
-    displayLineResult.textContent = ui.result;
+    displayLineResult.innerHTML = ui.result;
     calcStateUI.textContent = JSON.stringify(state, null, 2);
   }
 
@@ -111,16 +118,16 @@
     math.operator = operator;
 
     if (!ui.value) {
-      // fix multiple operators in result line
-      if (['+', '-', '*', '/'].includes(ui.result.slice(-1))) {
+      // TODO: fix multiple operators in result line OR remove printKeys
+      if (['+', '-', '*', '/', '&plus;'].includes(ui.result.slice(-1))) {
         ui.result = ui.result.slice(0, -1);
       }
 
-      ui.result += math.operator;
+      ui.result += printKeys[math.operator];
     } else {
       math.a = Number(ui.value);
       ui.value = '';
-      ui.result = math.a + math.operator;
+      ui.result = math.a + printKeys[math.operator];
     }
   }
 
