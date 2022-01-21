@@ -28,26 +28,26 @@
   // TODO: simplify state?
   let state = {
     math: {
-      a: '',
+      a: 0,
       b: '',
       operator: '',
     },
     ui: {
       result: '',
-      value: '',
+      value: '0',
     },
   };
 
   function clearState() {
     state = {
       math: {
-        a: '',
+        a: 0,
         b: '',
         operator: '',
       },
       ui: {
         result: '',
-        value: '',
+        value: '0',
       },
     };
   }
@@ -67,14 +67,13 @@
   function processValueKey(value) {
     const { ui } = state;
 
-    if (value === '.') {
-      if (ui.value.indexOf('.') === -1) {
-        if (ui.value.length === 0 || (ui.value.length === 1 && ui.value.slice(0, 1) === '-')) {
-          ui.value += '0.';
-        } else {
-          ui.value += '.';
-        }
-      }
+    if (value === '.' && ui.value.indexOf('.') === -1) {
+      ui.value += '.';
+      return;
+    }
+
+    if (ui.value === '0') {
+      ui.value = value;
     } else {
       ui.value += value;
     }
@@ -84,7 +83,7 @@
     const { math, ui } = state;
 
     function tryCalculation() {
-      if (math.a && math.operator && ui.value) {
+      if (math.operator && ui.value) {
         // TODO: check if ui.result contains operator!
         math.b = ui.value;
         console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
@@ -93,8 +92,9 @@
         // update state
         math.a = result;
         math.b = '';
-        ui.result = String(result);
-        ui.value = '';
+        math.operator = '';
+        ui.result = '';
+        ui.value = String(result);
       } else {
         console.log('Not enough data to perform calculation');
       }
@@ -107,20 +107,16 @@
 
     math.operator = operator;
 
-    if (math.a && !ui.value) {
+    if (!ui.value) {
       // fix multiple operators in result line
       if (['+', '-', '*', '/'].includes(ui.result.slice(-1))) {
         ui.result = ui.result.slice(0, -1);
       }
 
       ui.result += math.operator;
-      return;
-    }
-
-    if (!math.a) {
-      math.a = ui.value;
+    } else {
+      math.a = Number(ui.value);
       ui.value = '';
-      // check
       ui.result = math.a + math.operator;
     }
   }
