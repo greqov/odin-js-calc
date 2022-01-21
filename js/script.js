@@ -67,8 +67,10 @@
   function processValueKey(value) {
     const { ui } = state;
 
-    if (value === '.' && ui.value.indexOf('.') === -1) {
-      ui.value += '.';
+    if (value === '.') {
+      if (ui.value.indexOf('.') === -1) {
+        ui.value += '.';
+      }
       return;
     }
 
