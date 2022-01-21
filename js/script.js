@@ -66,6 +66,8 @@
   function processValueKey(value) {
     const { ui } = state;
 
+    if (ui.value.length >= 15) return;
+
     if (value === '.') {
       if (ui.value.indexOf('.') === -1) {
         if (ui.value === '') {
@@ -102,11 +104,12 @@
       if (math.operator && ui.value) {
         math.b = ui.value;
         console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
-        const result = operate(math.operator, math.a, math.b);
+        let result = operate(math.operator, math.a, math.b);
 
         if (Math.abs(result) === Infinity || Number.isNaN(result)) {
           clearState('Error');
         } else {
+          result = Math.round(result * 1000) / 1000;
           // update state
           math.a = result;
           math.b = '';
