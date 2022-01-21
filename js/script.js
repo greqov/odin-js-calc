@@ -83,29 +83,27 @@
   function processOperatorKey(operator) {
     const { math, ui } = state;
 
-    function performCalcActions() {
-      console.log('performCalcActions');
-      // TODO: check if ui.result contains operator!
-      math.b = ui.value;
-      const result = operate(math.operator, math.a, math.b);
-
-      // update state
-      math.a = result;
-      math.b = '';
-      ui.result = result;
-      ui.value = '';
-    }
-
-    if (operator === '=') {
+    function tryCalculation() {
       if (math.a && math.operator && ui.value) {
-        performCalcActions();
+        // TODO: check if ui.result contains operator!
+        math.b = ui.value;
+        console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
+        const result = operate(math.operator, math.a, math.b);
+
+        // update state
+        math.a = result;
+        math.b = '';
+        ui.result = result;
+        ui.value = '';
       } else {
         console.log('Not enough data to perform calculation');
       }
-      return;
     }
 
-    if (math.a && math.operator && ui.value) performCalcActions();
+    tryCalculation();
+
+    // Avoid rewrite operator to '='
+    if (operator === '=') return;
 
     math.operator = operator;
 
