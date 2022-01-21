@@ -118,9 +118,9 @@
     math.operator = operator;
 
     if (!ui.value) {
-      // TODO: fix multiple operators in result line OR remove printKeys
-      if (['+', '-', '*', '/', '&plus;'].includes(ui.result.slice(-1))) {
-        ui.result = ui.result.slice(0, -1);
+      // remove prev operator in result line
+      if (ui.result.indexOf('&') !== -1) {
+        ui.result = parseFloat(ui.result);
       }
 
       ui.result += printKeys[math.operator];
