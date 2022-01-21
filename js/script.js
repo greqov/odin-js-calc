@@ -93,7 +93,7 @@
         // update state
         math.a = result;
         math.b = '';
-        ui.result = result;
+        ui.result = String(result);
         ui.value = '';
       } else {
         console.log('Not enough data to perform calculation');
@@ -107,9 +107,12 @@
 
     math.operator = operator;
 
-    // TODO: replace the last operator in ui.result
-
     if (math.a && !ui.value) {
+      // fix multiple operators in result line
+      if (['+', '-', '*', '/'].includes(ui.result.slice(-1))) {
+        ui.result = ui.result.slice(0, -1);
+      }
+
       ui.result += math.operator;
       return;
     }
