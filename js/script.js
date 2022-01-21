@@ -1,21 +1,14 @@
 'use strict';
 
 (function () {
-  // basic math operations
-  const sum = (a, b) => a + b;
-  const substr = (a, b) => a - b;
-  const divide = (a, b) => a / b;
-  const multiply = (a, b) => a * b;
-
   const operations = {
-    '+': sum,
-    '-': substr,
-    '*': multiply,
-    '/': divide,
+    '+': (a, b) => a + b,
+    '-': (a, b) => a - b,
+    '*': (a, b) => a * b,
+    '/': (a, b) => a / b,
   };
 
-  const pickOperation = (operator) => operations[operator];
-  const operate = (operator, a, b) => pickOperation(operator)(Number(a), Number(b));
+  const operate = (operator, a, b) => operations[operator](Number(a), Number(b));
 
   // update display
   // get all UI elements
