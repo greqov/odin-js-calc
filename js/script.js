@@ -15,7 +15,7 @@
   };
 
   const pickOperation = (operator) => operations[operator];
-  const operate = (operator, a, b) => pickOperation(operator)(a, b);
+  const operate = (operator, a, b) => pickOperation(operator)(Number(a), Number(b));
 
   // update display
   // get all UI elements
@@ -25,26 +25,29 @@
   const displayLineResult = calc.querySelector('.display-line--top');
 
   // set some state
+  // TODO: simplify state?
   let state = {
-    a: '',
-    b: '',
-    operator: '',
-    result: '',
+    math: {
+      a: '',
+      b: '',
+      operator: '',
+    },
     ui: {
-      value: '',
       result: '',
+      value: '',
     },
   };
 
   function clearState() {
     state = {
-      a: '',
-      b: '',
-      operator: '',
-      result: '',
+      math: {
+        a: '',
+        b: '',
+        operator: '',
+      },
       ui: {
-        value: '',
         result: '',
+        value: '',
       },
     };
   }
@@ -57,21 +60,6 @@
     displayLine.textContent = ui.value;
     displayLineResult.textContent = ui.result;
     calcStateUI.textContent = JSON.stringify(state, null, 2);
-  }
-
-  function doOperation(operator, a, b, printChar) {
-    const result = operate(operator, a, b);
-    console.log({ result });
-    state.a = result;
-    state.b = '';
-    state.operator = operator;
-    state.result = result;
-    state.ui.value = '';
-    if (printChar) {
-      state.ui.result = result + printChar;
-    } else {
-      state.ui.result = result;
-    }
   }
 
   // add keypress events somehow
@@ -93,41 +81,46 @@
   }
 
   function processOperatorKey(operator) {
-    const { result, ui } = state;
+    const { math, ui } = state;
 
-    if (result && !ui.value) {
-      state.operator = operator;
-      // check if the last el is operator.
-      if (typeof ui.result === 'number') {
-        ui.result += state.operator;
-      } else {
-        ui.result = ui.result.slice(0, -1) + operator;
-      }
-    }
+    function performCalcActions() {
+      console.log('performCalcActions');
+      // TODO: check if ui.result contains operator!
+      math.b = ui.value;
+      const result = operate(math.operator, math.a, math.b);
 
-    if (operator === '-' && ui.value.length === 0 && !result) {
-      ui.value += operator;
-      return;
-    }
-
-    if (state.a && ui.value) {
-      // prev operator
-      doOperation(state.operator, state.a, Number(ui.value), operator);
-      state.operator = operator;
-      updateUI();
-      // print
-      return;
-    }
-
-    state.operator = operator;
-
-    if (!state.a) {
-      state.a = Number(ui.value);
-      ui.result = state.a + operator;
+      // update state
+      math.a = result;
+      math.b = '';
+      ui.result = result;
       ui.value = '';
-    } else if (ui.value.length > 0) {
-      state.b = Number(ui.value);
-      doOperation(operator, state.a, state.b);
+    }
+
+    if (operator === '=') {
+      if (math.a && math.operator && ui.value) {
+        performCalcActions();
+      } else {
+        console.log('Not enough data to perform calculation');
+      }
+      return;
+    }
+
+    if (math.a && math.operator && ui.value) performCalcActions();
+
+    math.operator = operator;
+
+    // TODO: replace the last operator in ui.result
+
+    if (math.a && !ui.value) {
+      ui.result += math.operator;
+      return;
+    }
+
+    if (!math.a) {
+      math.a = ui.value;
+      ui.value = '';
+      // check
+      ui.result = math.a + math.operator;
     }
   }
 
@@ -138,17 +131,6 @@
 
       if (operator === 'clear') {
         clearState();
-        updateUI();
-        return;
-      }
-
-      if (operator === '=') {
-        const { operator: op, a, b, ui } = state;
-
-        if (!a || !ui.value) return;
-        if (!b) state.b = Number(ui.value);
-
-        doOperation(op, a, state.b, true);
         updateUI();
         return;
       }
