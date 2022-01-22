@@ -66,7 +66,7 @@
   function processValueKey(value) {
     const { ui } = state;
 
-    if (ui.value.length >= 15) return;
+    if (ui.value.length >= 13) return;
 
     if (value === '.') {
       if (ui.value.indexOf('.') === -1) {
@@ -108,15 +108,21 @@
 
         if (Math.abs(result) === Infinity || Number.isNaN(result)) {
           clearState('Error');
-        } else {
-          result = Math.round(result * 1000) / 1000;
-          // update state
-          math.a = result;
-          math.b = '';
-          math.operator = '';
-          ui.result = '';
-          ui.value = String(result);
+          return;
         }
+
+        if (String(result).length > 13) {
+          clearState('Overflow');
+          return;
+        }
+
+        result = Math.round(result * 1000) / 1000;
+        // update state
+        math.a = result;
+        math.b = '';
+        math.operator = '';
+        ui.result = '';
+        ui.value = String(result);
       } else {
         console.log('Not enough data to perform calculation');
       }
@@ -147,8 +153,9 @@
   calcKeys.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const { value, operator } = e.target.dataset;
+      const { ui } = state;
 
-      if (state.ui.value === 'Error') clearState();
+      if (ui.value === 'Error' || ui.value === 'Overflow') clearState();
 
       if (operator) processOperatorKey(operator);
       if (value) processValueKey(value);
