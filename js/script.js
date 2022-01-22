@@ -19,7 +19,6 @@
 
   // update display
   // get all UI elements
-  const calcStateUI = document.querySelector('.calc-state');
   const calc = document.querySelector('.js-calc');
   const displayLine = calc.querySelector('.display-line--bottom');
   const displayLineResult = calc.querySelector('.display-line--top');
@@ -58,7 +57,6 @@
 
     displayLine.textContent = ui.value;
     displayLineResult.innerHTML = ui.result;
-    calcStateUI.textContent = JSON.stringify(state, null, 2);
   }
 
   // add keypress events somehow
