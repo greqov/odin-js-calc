@@ -104,15 +104,15 @@ footer {
   grid-area: dot;
 }
 
-.calc-key[data-operator="clear"] {
+.calc-key[data-operator="Delete"] {
   grid-area: clear;
 }
 
-.calc-key[data-operator="del"] {
+.calc-key[data-operator="Backspace"] {
   grid-area: del;
 }
 
-.calc-key[data-operator="="] {
+.calc-key[data-operator="Enter"] {
   grid-area: equal;
 }
 
@@ -167,17 +167,17 @@ footer {
   color: wheat;
 }
 
-.calc-key[data-operator="clear"] {
+.calc-key[data-operator="Delete"] {
   color: wheat;
   background-color: tomato;
 }
 
-.calc-key[data-operator="="] {
+.calc-key[data-operator="Enter"] {
   color: white;
   background-color: #89c763;
 }
 
-.calc-key[data-operator="="],
+.calc-key[data-operator="Enter"],
 .calc-key[data-operator="+"],
 .calc-key[data-operator="-"],
 .calc-key[data-operator="*"],

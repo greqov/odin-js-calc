@@ -120,12 +120,12 @@
   function processOperatorKey(operator) {
     const { math, ui } = state;
 
-    if (operator === 'clear') {
+    if (operator === 'Delete') {
       clearState();
       return;
     }
 
-    if (operator === 'del') {
+    if (operator === 'Backspace') {
       ui.value = ui.value.slice(0, -1);
       if (!ui.value || ui.value === '-') ui.value = '0';
       return;
@@ -133,8 +133,8 @@
 
     tryCalculation();
 
-    // Avoid rewrite operator to '='
-    if (operator === '=') return;
+    // Avoid rewrite operator on 'Enter' or '='
+    if (operator === 'Enter' || operator === '=') return;
 
     math.operator = operator;
 
@@ -165,6 +165,25 @@
 
       updateUI();
     });
+  });
+
+  // keyboard support
+  const allowedValues = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+  const allowedOperators = ['+', '-', '*', '/', '=', 'Backspace', 'Enter', 'Delete'];
+
+  document.addEventListener('keydown', (e) => {
+    const { key } = e;
+    const { ui } = state;
+
+    if (ui.value === 'Error' || ui.value === 'Overflow') clearState();
+
+    if (allowedValues.indexOf(key) !== -1) {
+      processValueKey(key);
+    } else if (allowedOperators.indexOf(key) !== -1) {
+      processOperatorKey(key);
+    }
+
+    updateUI();
   });
 
   // init actions
