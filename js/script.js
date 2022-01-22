@@ -63,6 +63,37 @@
 
   // add keypress events somehow
 
+  function tryCalculation() {
+    const { math, ui } = state;
+
+    if (math.operator && ui.value) {
+      math.b = ui.value;
+      console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
+      let result = operate(math.operator, math.a, math.b);
+
+      if (Math.abs(result) === Infinity || Number.isNaN(result)) {
+        clearState('Error');
+        return;
+      }
+
+      result = Math.round(result * 1000) / 1000;
+
+      if (String(result).length > 13) {
+        clearState('Overflow');
+        return;
+      }
+
+      // update state
+      math.a = result;
+      math.b = '';
+      math.operator = '';
+      ui.result = '';
+      ui.value = String(result);
+    } else {
+      console.log('Not enough data to perform calculation');
+    }
+  }
+
   function processValueKey(value) {
     const { ui } = state;
 
@@ -98,34 +129,6 @@
       ui.value = ui.value.slice(0, -1);
       if (!ui.value || ui.value === '-') ui.value = '0';
       return;
-    }
-
-    function tryCalculation() {
-      if (math.operator && ui.value) {
-        math.b = ui.value;
-        console.log(`Try calculate ${math.a} ${math.operator} ${math.b}`);
-        let result = operate(math.operator, math.a, math.b);
-
-        if (Math.abs(result) === Infinity || Number.isNaN(result)) {
-          clearState('Error');
-          return;
-        }
-
-        if (String(result).length > 13) {
-          clearState('Overflow');
-          return;
-        }
-
-        result = Math.round(result * 1000) / 1000;
-        // update state
-        math.a = result;
-        math.b = '';
-        math.operator = '';
-        ui.result = '';
-        ui.value = String(result);
-      } else {
-        console.log('Not enough data to perform calculation');
-      }
     }
 
     tryCalculation();
