@@ -169,6 +169,9 @@
     let value;
     let operator;
 
+    // remove focus from UI button to prevent double action on Enter
+    e.target.blur();
+
     if (allowedValues.indexOf(key) !== -1) {
       value = key;
     } else if (allowedOperators.indexOf(key) !== -1) {
