@@ -12,7 +12,7 @@
 - [x] error handlers (divide by 0, NaN, Infinity)
 - [x] support floating numbers (2.54.12.1)
 - [x] backspace button
-- [] ui
+- [x] ui
 - [] keyboard support
 - [x] pretty print operator keys
 - [] refactor
