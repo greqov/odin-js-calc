@@ -17,13 +17,10 @@
 
   const operate = (operator, a, b) => operations[operator](Number(a), Number(b));
 
-  // update display
-  // get all UI elements
   const calc = document.querySelector('.js-calc');
   const displayLine = calc.querySelector('.display-line--bottom');
   const displayLineResult = calc.querySelector('.display-line--top');
 
-  // set some state
   let state = {
     math: {
       a: 0,
@@ -50,16 +47,12 @@
     };
   }
 
-  // update state on operations
-  // update UI after operations
   function updateUI() {
     const { ui } = state;
 
     displayLine.textContent = ui.value;
     displayLineResult.innerHTML = ui.result;
   }
-
-  // add keypress events somehow
 
   function tryCalculation() {
     const { math, ui } = state;
