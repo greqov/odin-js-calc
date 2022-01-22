@@ -152,18 +152,20 @@
     }
   }
 
+  function processKey(ui, value, operator) {
+    if (ui.value === 'Error' || ui.value === 'Overflow') clearState();
+
+    if (operator) processOperatorKey(operator);
+    if (value) processValueKey(value);
+
+    updateUI();
+  }
+
   const calcKeys = calc.querySelectorAll('.calc-key');
   calcKeys.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       const { value, operator } = e.target.dataset;
-      const { ui } = state;
-
-      if (ui.value === 'Error' || ui.value === 'Overflow') clearState();
-
-      if (operator) processOperatorKey(operator);
-      if (value) processValueKey(value);
-
-      updateUI();
+      processKey(state.ui, value, operator);
     });
   });
 
@@ -173,17 +175,16 @@
 
   document.addEventListener('keydown', (e) => {
     const { key } = e;
-    const { ui } = state;
-
-    if (ui.value === 'Error' || ui.value === 'Overflow') clearState();
+    let value;
+    let operator;
 
     if (allowedValues.indexOf(key) !== -1) {
-      processValueKey(key);
+      value = key;
     } else if (allowedOperators.indexOf(key) !== -1) {
-      processOperatorKey(key);
+      operator = key;
     }
 
-    updateUI();
+    processKey(state.ui, value, operator);
   });
 
   // init actions
