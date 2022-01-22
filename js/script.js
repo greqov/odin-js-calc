@@ -3,7 +3,7 @@
 (function () {
   const printKeys = {
     '+': '&plus;',
-    '-': '&minus;',
+    '-': '&#45;', // short minus
     '*': '&times;',
     '/': '&divide;',
   };
